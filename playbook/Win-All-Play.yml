@@ -1,0 +1,88 @@
+All in one Windows playbook
+- name:  create directory structure
+  hosts: 10.0.18.185
+  tasks:
+   - name: Install NSCP and Create Directory
+     win_file:
+        path: C:\setup
+        state: directory
+   - name: Copying files
+     win_copy:
+        src: /srv/NSCP-0.5.2.35-x64.msi
+        dest: C:\setup\NSCP-0.5.2.35-x64.msi
+   - name:  Install NSClient++
+     win_msi:
+       path: C:\setup\NSCP-0.5.2.35-x64.msi
+       wait: True
+       state: present
+   - name: Copying NS-INI
+     win_copy:
+        src: /srv/nsclient.ini
+        dest:  C:\Program Files\NSClient++\nsclient.ini
+   - name: Restart NSClient++
+     win_service:
+       name: nscp
+	   state: restarted
+   - name: Remove a Service
+     win_service:
+        name: AnyDesk
+        state: absent    
+   - name : user creation
+     win_user:
+        name: hussain
+        password: Password1
+        state: present
+        groups:
+          - Users
+    
+    
+ =========================================================================================
+ 
+ 
+ - name: Enable AD Freatures
+   hosts: 10.0.18.95
+   tasks:
+    - name: Install AD Services feature
+      win_feature:
+        name: AD-Domain-Services
+        include_management_tools: yes
+        include_sub_features: yes
+        state: present
+      register: result
+
+    - name: Create new forest
+      win_domain:
+        dns_domain_name: pre.local
+        safe_mode_password: Password1
+      register: result
+
+    - name: Reboot after creation
+      win_reboot:
+        msg: "Server config in progress; rebooting..."
+      when: result.reboot_required
+===============================================================================================
+- name: Domain User Creation
+  hosts: 10.0.18.95
+  tasks:
+   - name: Ensure user sadham  is created and use custom credentials to create the user
+     win_domain_user:
+       name: sadham
+       firstname: sadham
+       surname: hussain
+       password: Welcome@123$
+       state: present
+       domain_username: PRE\administrator
+       domain_password: Welcome@123
+       domain_server: pre.local
+   - name: Ensure user sadham  is present in OU ou=Users,dc=pre,dc=local
+     win_domain_user:
+       name: sadham
+       password: Welcome@123$
+       state: present
+       path: ou=Users,dc=pre,dc=local
+       groups:
+         - Domain Admins
+================================================================================================
+ 
+ 
+ 
