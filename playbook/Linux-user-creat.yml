@@ -2,8 +2,9 @@
 - hosts: 18.138.83.147
   tasks: Linux-new-user creation with Admin access
   - name: New user creation   
-    user: ansible
-    password: Ansible123@
-    createhome: yes
-    state: present
+    user: 
+       name: ansible
+       password: Ansible123@
+       createhome: yes
+       state: present
        
