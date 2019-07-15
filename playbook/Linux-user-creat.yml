@@ -1,10 +1,9 @@
 ---
 - hosts: 18.138.83.147
   tasks: 
-    - name: New user creation with sudo access  
+    - name: New user creation 
       user: name =ansible
        password =  Ansible123@
-       use_sudo: yes
        createhome =  yes
        state: present
        
