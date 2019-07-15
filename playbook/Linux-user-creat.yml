@@ -2,8 +2,9 @@
 - hosts: 18.138.83.147
   tasks: 
     - name: New user creation 
-      user: name =ansible
-       password =  Ansible123@
-       createhome =  yes
-       state = present
+      user: 
+        name: ansible
+        shell: /bin/bash
+        createhome: yes
+        state: present
        
