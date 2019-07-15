@@ -6,5 +6,5 @@
        password: Ansible123@
        use_sudo: yes
        createhome: yes
-       state: :present
+       state: present
        
