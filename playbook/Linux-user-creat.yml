@@ -5,5 +5,5 @@
       user: name =ansible
        password =  Ansible123@
        createhome =  yes
-       state: present
+       state = present
        
